@@ -4,14 +4,7 @@ import Link from 'next/link';
 import ProjectTerminal from '@/components/sections/ProjectTerminal';
 import ProjectMediaTabs from '@/components/sections/ProjectMediaTabs';
 
-export async function generateStaticParams() {
-  const projects = await getProjects();
-  if (!projects) return [];
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
-}
-
+export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const project = await getProjectBySlug(slug);

@@ -7,6 +7,8 @@ import CookieBanner from '@/components/ui/CookieBanner';
 import ConsoleSilencer from '@/components/ConsoleSilencer';
 import Script from 'next/script';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata() {
   const personal = await getPersonalInfo();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rohitchouhan.com';

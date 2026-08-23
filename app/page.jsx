@@ -5,6 +5,8 @@ import SceneWrapper from '@/components/three/SceneWrapper';
 import Link from 'next/link';
 import Image from 'next/image';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const [personal, projects, skills, education, experience] = await Promise.all([
     getPersonalInfo(),
