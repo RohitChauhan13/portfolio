@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
 
 export const metadata = {
-  title: 'Thank You | Portfolio',
-  description: 'Thank you for reaching out.',
+  title: 'Thank You | Rohit Chouhan',
+  description: 'Thank you for contacting Rohit Chouhan about software engineering and web development opportunities.',
+  keywords: ['Contact Confirmation', 'Rohit Chouhan', 'Portfolio Contact'],
 };
 
 export default function ThankYou() {

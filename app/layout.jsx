@@ -11,11 +11,26 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
   const personal = await getPersonalInfo();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rohitchouhan.com';
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohitchouhan.com').replace(/\/$/, '');
   const name = 'Rohit Chouhan';
   const title = `${name} | Software Engineer & Full Stack Developer`;
   const description = personal?.short_bio || `${name} is a Software Engineer and Full Stack Developer specializing in React, Next.js, Node.js, and modern web architectures. Explore my portfolio and projects.`;
   const ogImage = personal?.profile_image_url || `${baseUrl}/og-image.jpg`;
+  const keywords = [
+    'Rohit Chouhan',
+    'Software Engineer',
+    'Full Stack Developer',
+    'React Developer',
+    'Next.js Developer',
+    'Node.js Developer',
+    'JavaScript Developer',
+    'Portfolio',
+    'Web Developer India',
+    'Frontend Engineer',
+    'Backend Developer',
+    'Modern Web Applications',
+    'MERN Stack Developer',
+  ];
 
   return {
     metadataBase: new URL(baseUrl),
@@ -24,6 +39,7 @@ export async function generateMetadata() {
       template: `%s | ${name}`
     },
     description,
+    keywords,
     authors: [{ name }],
     creator: name,
     publisher: name,

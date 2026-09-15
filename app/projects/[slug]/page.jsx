@@ -9,16 +9,26 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const project = await getProjectBySlug(slug);
   if (!project) return { title: 'Project Not Found | Rohit Chouhan' };
-  
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rohitchouhan.com';
+
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohitchouhan.com').replace(/\/$/, '');
   const title = `${project.title} | Software Engineering Project`;
   const description = project.short_description || `Learn about ${project.title}, a technical project by Software Engineer Rohit Chouhan.`;
   const ogImage = project.image_url || `${baseUrl}/og-image.jpg`;
   const url = `${baseUrl}/projects/${slug}`;
+  const keywords = [
+    project.title,
+    'Software Engineering Project',
+    'Rohit Chouhan',
+    'React Project',
+    'Next.js Project',
+    'Full Stack Development',
+    ...(Array.isArray(project.tech_stack) ? project.tech_stack : []),
+  ].filter(Boolean);
 
   return {
     title,
     description,
+    keywords,
     alternates: {
       canonical: url,
     },

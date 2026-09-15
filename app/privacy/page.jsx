@@ -1,6 +1,7 @@
 export const metadata = {
-  title: 'Privacy Policy | Portfolio',
-  description: 'Privacy policy and data handling.',
+  title: 'Privacy Policy | Rohit Chouhan',
+  description: 'Privacy policy and website data handling for Rohit Chouhan portfolio and contact forms.',
+  keywords: ['Privacy Policy', 'Rohit Chouhan', 'Portfolio Website', 'Contact Form Privacy'],
 };
 
 export default function PrivacyPolicy() {

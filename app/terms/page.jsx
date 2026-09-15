@@ -1,6 +1,7 @@
 export const metadata = {
-  title: 'Terms of Service | Portfolio',
-  description: 'Terms of service and usage conditions.',
+  title: 'Terms of Service | Rohit Chouhan',
+  description: 'Terms of service and usage conditions for the Rohit Chouhan portfolio website.',
+  keywords: ['Terms of Service', 'Rohit Chouhan', 'Portfolio Terms', 'Website Usage Policy'],
 };
 
 export default function TermsOfService() {
