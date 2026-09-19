@@ -1,0 +1,46 @@
+# Rohit Chouhan (Rohit Chauhan) — Complete Professional Profile & Knowledge Base
+
+Official entity documentation and machine-readable data for Rohit Chouhan.
+
+## Identity & Canonical Links
+- Name: Rohit Chouhan
+- Natural Alternate Name: Rohit Chauhan
+- Professional Title: Software Engineer & React Native Developer
+- Current Employer: GTT Data Solutions, Sangli, Maharashtra, India
+- Location: Sangli, Maharashtra, India — 416410
+- Website: https://rohit-chouhan-portfolio.vercel.app
+- GitHub: https://github.com/RohitChauhan13
+- LinkedIn: https://www.linkedin.com/in/rohitchauhan13
+- Email: rohitchauhan6232@gmail.com
+- Phone: +91 7024756186
+
+## Biography
+Rohit Chouhan (frequently searched as Rohit Chauhan) is a Software Engineer based in Sangli, Maharashtra, India. He specializes in React Native mobile development for Android and iOS, complemented by full-stack engineering expertise in Node.js, Express.js, TypeScript, and modern database architectures (SQLite, MySQL, PostgreSQL, Firebase).
+
+Rohit currently serves as a Software Engineer at GTT Data Solutions in Sangli, where he builds, optimizes, and ships enterprise-grade mobile applications. Notably, he played a critical role in conducting compliance audits and migrating 6+ production mobile applications to comply with Google's Android 16KB memory page-size standard. In addition to enterprise projects, Rohit has delivered freelance client products, deploying backends and databases independently on Microsoft Azure Windows VMs with DuckDNS dynamic routing and Caddy reverse proxies.
+
+## Education
+- Degree: Bachelor of Computer Applications (BCA)
+- Institution: Institute of Management and Rural Development Administration (IMRDA), Sangli — Bharati Vidyapeeth University
+- Duration: 2022 – 2025
+- Academic Standing: 9.0 / 10 CGPA (Top 1% of the graduating batch)
+
+## Work History
+### GTT Data Solutions, Sangli | Software Engineer (May 2025 – Present)
+- Develops and maintains production React Native applications for commercial clients in Scrum/Agile workflows.
+- Implements offline-first architectures utilizing SQLite and Redux Toolkit with automated queue-based network synchronization.
+- Integrates Firebase Cloud Messaging (FCM) for background and foreground notifications and Google Maps SDK for real-time tracking.
+- Optimizes mobile applications with lazy loading, list memoization, and pagination, reducing initial app load time by up to 40%.
+- Led dependency audits and migration across 6+ production apps for Google's Android 16KB page-size policy.
+- Directly handles production deployments to the Google Play Console for client apps including RSF and MahaGPS.
+
+## Verified Portfolio Projects
+1. Shikuyaa: Production educational platform with 10,000+ active users and 50,000+ downloads. Engineered the Bridge 4 Bharat (B4B) module end-to-end (mentor/student matching, scheduling, MeritHub WebView integration).
+2. Firecrackers Business Suite: Complete wholesale business management suite with separate employee and admin React Native apps and a custom Node.js/Express/MySQL backend hosted on Azure VM.
+3. MediMate: Pharmacy inventory and customer credit ("Udhaar") tracking system with PostgreSQL, Brevo transactional email OTP, and Firebase Admin SDK.
+4. PayPlus: Automated salary computation system supporting hybrid payment splitting (cash/online) and TDS calculations.
+5. RSF — Enterprise Employee Management: Day-In/Day-Out attendance with face verification, 24/7 background location tracking, and offline-first SQLite synchronization.
+6. Ticket Khidakee: Event ticketing mobile demo application built in React Native.
+7. MahaGPS: Fleet management mobile application deployed on the Google Play Console.
+8. Draft Career: AI-powered resume builder web application.
+9. RAG Bot: Retrieval-Augmented Generation AI assistant trained on Rohit's knowledge base.

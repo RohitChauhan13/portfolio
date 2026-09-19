@@ -1,7 +1,10 @@
 export const metadata = {
-  title: 'Privacy Policy | Rohit Chouhan',
+  title: 'Privacy Policy',
   description: 'Privacy policy and website data handling for Rohit Chouhan portfolio and contact forms.',
   keywords: ['Privacy Policy', 'Rohit Chouhan', 'Portfolio Website', 'Contact Form Privacy'],
+  alternates: {
+    canonical: 'https://rohit-chouhan-portfolio.vercel.app/privacy',
+  },
 };
 
 export default function PrivacyPolicy() {

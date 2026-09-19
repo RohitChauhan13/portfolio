@@ -5,6 +5,10 @@ export const metadata = {
   title: 'Thank You | Rohit Chouhan',
   description: 'Thank you for contacting Rohit Chouhan about software engineering and web development opportunities.',
   keywords: ['Contact Confirmation', 'Rohit Chouhan', 'Portfolio Contact'],
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function ThankYou() {

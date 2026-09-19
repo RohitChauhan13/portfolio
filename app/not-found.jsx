@@ -1,5 +1,14 @@
 import Link from 'next/link';
 
+export const metadata = {
+  title: '404 - Page Not Found',
+  description: 'The requested page could not be found.',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function NotFound() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center', zIndex: 50, position: 'relative' }}>

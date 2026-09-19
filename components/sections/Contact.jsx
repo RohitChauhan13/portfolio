@@ -129,6 +129,27 @@ export default function Contact({ personal }) {
                 </div>
               </div>
             )}
+
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+              <a 
+                href="https://github.com/RohitChauhan13" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="mono-text"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-primary)', textDecoration: 'none', fontSize: '0.85rem' }}
+              >
+                GitHub ↗
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/rohitchauhan13" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="mono-text"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-primary)', textDecoration: 'none', fontSize: '0.85rem' }}
+              >
+                LinkedIn ↗
+              </a>
+            </div>
           </div>
         </div>
 

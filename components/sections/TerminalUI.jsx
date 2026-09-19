@@ -428,7 +428,9 @@ export default function TerminalUI({ experience, education, skills, projects }) 
             }}
           >
             <div ref={contentInnerRef}>
-              {printedText.split('\n').map((line, i) => renderLine(line, i))}
+              {((!isHydrated && !printedText) ? generateText(experience, 'experience') : printedText)
+                .split('\n')
+                .map((line, i) => renderLine(line, i))}
             </div>
           </div>
 
@@ -454,6 +456,59 @@ export default function TerminalUI({ experience, education, skills, projects }) 
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Semantic Crawlable Content Outline for Search Engines & Screen Readers */}
+      <div 
+        aria-label="Crawlable Portfolio Directory"
+        style={{ 
+          position: 'absolute', 
+          width: '1px', 
+          height: '1px', 
+          padding: 0, 
+          margin: '-1px', 
+          overflow: 'hidden', 
+          clip: 'rect(0, 0, 0, 0)', 
+          whiteSpace: 'nowrap', 
+          border: 0 
+        }}
+      >
+        <h2>Work Experience — Software Engineer at GTT Data Solutions</h2>
+        {experience?.map((item) => (
+          <article key={item.id || item.company}>
+            <h3>{item.role} at {item.company}</h3>
+            <p>{item.description}</p>
+            <p>Technologies: {Array.isArray(item.tech_stack) ? item.tech_stack.join(', ') : item.tech_stack}</p>
+          </article>
+        ))}
+
+        <h2>Verified Engineering Projects</h2>
+        {projects?.map((item) => (
+          <article key={item.id || item.slug}>
+            <h3>
+              <Link href={`/projects/${item.slug || item.id}`}>
+                {item.title} — Software Project by Rohit Chouhan
+              </Link>
+            </h3>
+            <p>{item.short_description || item.full_description}</p>
+            <p>Tech Stack: {Array.isArray(item.tech_stack) ? item.tech_stack.join(', ') : item.tech_stack}</p>
+          </article>
+        ))}
+
+        <h2>Education &amp; Qualifications</h2>
+        {education?.map((item) => (
+          <article key={item.id || item.degree}>
+            <h3>{item.degree} — {item.institution}</h3>
+            <p>{item.grade ? `${item.grade}. ` : ''}{item.description || ''}</p>
+          </article>
+        ))}
+
+        <h2>Technical Skills &amp; Proficiencies</h2>
+        <ul>
+          {skills?.map((item) => (
+            <li key={item.id || item.name}>{item.name} ({item.category})</li>
+          ))}
+        </ul>
       </div>
 
     </section>

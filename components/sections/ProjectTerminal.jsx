@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 export default function ProjectTerminal({ project, techStack }) {
   const [printedText, setPrintedText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const terminalRef = useRef(null);
   const containerRef = useRef(null);
   const contentInnerRef = useRef(null);
@@ -14,17 +15,35 @@ export default function ProjectTerminal({ project, techStack }) {
   const [isDragging, setIsDragging] = useState(false);
   const dragData = useRef({ startY: 0, startH: 0 });
 
+  const getFullProjectText = useCallback(() => {
+    let text = `rohit@portfolio:~$ fetch --project ${project?.slug || ''}\n`;
+    text += `> Locating project files...\n`;
+    text += `> [SUCCESS] Found ${project?.slug || 'project'}.sys\n\n`;
+    text += `const projectData = {\n`;
+    text += `  title: "${project?.title || ''}",\n`;
+    if (project?.start_date) text += `  deployment_year: ${new Date(project.start_date).getFullYear()},\n`;
+    if (techStack && techStack.length > 0) {
+      text += `  tech_stack: [${techStack.map(t => `"${typeof t === 'string' ? t.trim() : t}"`).join(', ')}],\n`;
+    }
+    const cleanDesc = (project?.full_description || project?.description || project?.short_description || '').replace(/"/g, '\\"').replace(/\n/g, ' ');
+    text += `  architecture_overview: "${cleanDesc}"\n`;
+    text += `};\n\n`;
+    text += `> End of stream.\n`;
+    text += `> Initializing attached visual payload sequence...\n`;
+    text += `rohit@portfolio:~$ `;
+    return text;
+  }, [project, techStack]);
+
   // Handle responsive default height on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (window.innerWidth <= 768) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTermHeight(300); // mobile/tablet default
       } else {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTermHeight(400); // desktop default
       }
     }
+    setIsHydrated(true);
   }, []);
 
   const startDrag = useCallback((e) => {
@@ -62,23 +81,9 @@ export default function ProjectTerminal({ project, techStack }) {
 
   // --- Typing animation ---
   useEffect(() => {
-    let text = `rohit@portfolio:~$ fetch --project ${project.slug}\n`;
-    text += `> Locating project files...\n`;
-    text += `> [SUCCESS] Found ${project.slug}.sys\n\n`;
-    text += `const projectData = {\n`;
-    text += `  title: "${project.title || ''}",\n`;
-    if (project.start_date) text += `  deployment_year: ${new Date(project.start_date).getFullYear()},\n`;
-    if (techStack && techStack.length > 0) {
-      text += `  tech_stack: [${techStack.map(t => `"${typeof t === 'string' ? t.trim() : t}"`).join(', ')}],\n`;
-    }
-    const cleanDesc = (project.full_description || project.description || project.short_description || '').replace(/"/g, '\\"').replace(/\n/g, ' ');
-    text += `  architecture_overview: "${cleanDesc}"\n`;
-    text += `};\n\n`;
-    text += `> End of stream.\n`;
-    text += `> Initializing attached visual payload sequence...\n`;
-    text += `rohit@portfolio:~$ `;
+    if (!isHydrated) return;
+    const text = getFullProjectText();
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPrintedText('');
     setIsTyping(true);
     let currentIndex = 0;
@@ -93,7 +98,7 @@ export default function ProjectTerminal({ project, techStack }) {
       }
     }, 5);
     return () => clearInterval(interval);
-  }, [project, techStack]);
+  }, [getFullProjectText, isHydrated]);
 
   const renderLine = (line, i) => {
     const s = line || '';
@@ -102,7 +107,7 @@ export default function ProjectTerminal({ project, techStack }) {
       <div key={i}>
         <span style={{ color: '#eab308', fontWeight: 600 }}>rohit@portfolio:~$</span>{' '}
         <span style={{ color: '#a1a1aa' }}>{s.replace('rohit@portfolio:~$', '')}</span>
-        {i === printedText.split('\n').length - 1 && <span style={{ color: '#eab308' }}>{'\u2588'}</span>}
+        {i === (printedText || getFullProjectText()).split('\n').length - 1 && <span style={{ color: '#eab308' }}>{'\u2588'}</span>}
       </div>
     );
     if (s.startsWith('>')) return <div key={i} style={{ color: s.includes('[SUCCESS]') ? '#22c55e' : '#3b82f6' }}>{s}</div>;
@@ -191,7 +196,9 @@ export default function ProjectTerminal({ project, techStack }) {
           }}
         >
           <div ref={contentInnerRef}>
-            {printedText.split('\n').map((line, i) => renderLine(line, i))}
+            {((!isHydrated && !printedText) ? getFullProjectText() : printedText)
+              .split('\n')
+              .map((line, i) => renderLine(line, i))}
           </div>
         </div>
 
@@ -213,6 +220,28 @@ export default function ProjectTerminal({ project, techStack }) {
         >
           {[0,1,2,3].map(i => <div key={i} style={{ width: '20px', height: '1.5px', borderRadius: '1px', background: accentActive }} />)}
         </div>
+      </div>
+
+      {/* Semantic Crawlable Markup for Search Engines */}
+      <div 
+        aria-label="Project Information"
+        style={{ 
+          position: 'absolute', 
+          width: '1px', 
+          height: '1px', 
+          padding: 0, 
+          margin: '-1px', 
+          overflow: 'hidden', 
+          clip: 'rect(0, 0, 0, 0)', 
+          whiteSpace: 'nowrap', 
+          border: 0 
+        }}
+      >
+        <h1>{project?.title} — Software Engineering Project by Rohit Chouhan</h1>
+        <p>{project?.full_description || project?.short_description}</p>
+        {techStack && techStack.length > 0 && (
+          <p>Technologies Used: {techStack.join(', ')}</p>
+        )}
       </div>
     </div>
   );

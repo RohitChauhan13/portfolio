@@ -1,28 +1,39 @@
-import { getProjectBySlug, getProjects } from '@/lib/api';
+import { getProjectBySlug } from '@/lib/api';
+import { FALLBACK_PROJECTS } from '@/lib/fallbackData';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ProjectTerminal from '@/components/sections/ProjectTerminal';
 import ProjectMediaTabs from '@/components/sections/ProjectMediaTabs';
 
 export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+  const project = (await getProjectBySlug(slug)) || FALLBACK_PROJECTS.find(p => p.slug === slug || String(p.id) === slug);
   if (!project) return { title: 'Project Not Found | Rohit Chouhan' };
 
-  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohitchouhan.com').replace(/\/$/, '');
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohit-chouhan-portfolio.vercel.app').replace(/\/+$/, '');
   const title = `${project.title} | Software Engineering Project`;
-  const description = project.short_description || `Learn about ${project.title}, a technical project by Software Engineer Rohit Chouhan.`;
-  const ogImage = project.image_url || `${baseUrl}/og-image.jpg`;
-  const url = `${baseUrl}/projects/${slug}`;
+  const description = project.short_description || project.full_description?.slice(0, 160) || `Learn about ${project.title}, an engineering project by Software Engineer Rohit Chouhan (Rohit Chauhan).`;
+  const ogImage = project.thumbnail_url || project.image_url || `${baseUrl}/og-image.png`;
+  const url = `${baseUrl}/projects/${project.slug || slug}`;
+  
+  let techArray = [];
+  try {
+    techArray = typeof project.tech_stack === 'string' ? JSON.parse(project.tech_stack) : (project.tech_stack || []);
+  } catch {
+    if (typeof project.tech_stack === 'string') techArray = project.tech_stack.split(',');
+  }
+
   const keywords = [
     project.title,
     'Software Engineering Project',
     'Rohit Chouhan',
-    'React Project',
-    'Next.js Project',
+    'Rohit Chauhan',
+    'React Native Project',
+    'Android Project',
     'Full Stack Development',
-    ...(Array.isArray(project.tech_stack) ? project.tech_stack : []),
+    ...techArray,
   ].filter(Boolean);
 
   return {
@@ -33,39 +44,95 @@ export async function generateMetadata({ params }) {
       canonical: url,
     },
     openGraph: {
-      title,
+      title: `${project.title} | Software Engineering Project`,
       description,
       url,
-      images: [{ url: ogImage, alt: project.title }],
+      siteName: 'Rohit Chouhan Portfolio',
+      images: [{ url: ogImage, alt: `${project.title} — Software Engineering Project` }],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: `${project.title} | Software Engineering Project`,
       description,
       images: [ogImage],
+      creator: '@RohitChauhan13',
     }
   };
 }
 
 export default async function ProjectPage({ params }) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+  const project = (await getProjectBySlug(slug)) || FALLBACK_PROJECTS.find(p => p.slug === slug || String(p.id) === slug);
   
   if (!project) {
     notFound();
   }
 
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohit-chouhan-portfolio.vercel.app').replace(/\/+$/, '');
+
   let techStack = [];
-  try { techStack = typeof project.tech_stack === 'string' ? JSON.parse(project.tech_stack) : project.tech_stack; } catch(e) {
+  try { 
+    techStack = typeof project.tech_stack === 'string' ? JSON.parse(project.tech_stack) : (project.tech_stack || []); 
+  } catch(e) {
     if (typeof project.tech_stack === 'string') techStack = project.tech_stack.split(',');
   }
   
   let images = [];
-  try { images = typeof project.images === 'string' ? JSON.parse(project.images) : project.images; } catch(e) {}
+  try { 
+    images = typeof project.images === 'string' ? JSON.parse(project.images) : (project.images || []); 
+  } catch(e) {}
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': baseUrl
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Projects',
+            'item': `${baseUrl}/#terminal`
+          },
+          {
+            '@type': 'ListItem',
+            'position': 3,
+            'name': project.title,
+            'item': `${baseUrl}/projects/${project.slug || slug}`
+          }
+        ]
+      },
+      {
+        '@type': 'SoftwareApplication',
+        'name': project.title,
+        'headline': project.title,
+        'description': project.full_description || project.short_description,
+        'operatingSystem': 'Android, iOS, Web',
+        'applicationCategory': 'DeveloperApplication',
+        'url': `${baseUrl}/projects/${project.slug || slug}`,
+        'author': {
+          '@type': 'Person',
+          'name': 'Rohit Chouhan',
+          'alternateName': 'Rohit Chauhan',
+          'url': baseUrl
+        }
+      }
+    ]
+  };
 
   return (
     <main style={{ padding: '8rem 1rem 5rem 1rem', maxWidth: '1200px', margin: '0 auto', pointerEvents: 'auto', position: 'relative', zIndex: 10 }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       
       <Link href="/?tab=projects#terminal" className="mono-text" style={{ color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4rem', fontSize: '0.9rem', transition: 'color 0.2s' }}>
         <span style={{ fontSize: '1.2rem' }}>←</span> SYSTEM.RETURN

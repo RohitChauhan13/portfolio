@@ -1,7 +1,10 @@
 export const metadata = {
-  title: 'Terms of Service | Rohit Chouhan',
+  title: 'Terms of Service',
   description: 'Terms of service and usage conditions for the Rohit Chouhan portfolio website.',
   keywords: ['Terms of Service', 'Rohit Chouhan', 'Portfolio Terms', 'Website Usage Policy'],
+  alternates: {
+    canonical: 'https://rohit-chouhan-portfolio.vercel.app/terms',
+  },
 };
 
 export default function TermsOfService() {
