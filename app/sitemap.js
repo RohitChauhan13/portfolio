@@ -12,36 +12,45 @@ export default async function sitemap() {
   }
 
   const effectiveProjects = (projects && projects.length > 0) ? projects : FALLBACK_PROJECTS;
+  const now = new Date();
+
   const projectUrls = effectiveProjects
     .filter((project) => project?.slug || project?.id)
-    .map((project) => ({
-      url: `${baseUrl}/projects/${project.slug || project.id}`,
-      lastModified: new Date('2026-09-01'),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    }));
+    .map((project) => {
+      let lastMod = now;
+      if (project.updated_at) {
+        lastMod = new Date(project.updated_at);
+      } else if (project.created_at) {
+        lastMod = new Date(project.created_at);
+      }
+      return {
+        url: `${baseUrl}/projects/${project.slug || project.id}`,
+        lastModified: lastMod,
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      };
+    });
 
   const routes = [
     {
       url: baseUrl,
-      lastModified: new Date('2026-09-15'),
+      lastModified: now,
       changeFrequency: 'daily',
       priority: 1.0,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: new Date('2026-09-01'),
+      lastModified: new Date(now.getFullYear(), now.getMonth(), 1),
       changeFrequency: 'monthly',
-      priority: 0.4,
+      priority: 0.3,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: new Date('2026-09-01'),
+      lastModified: new Date(now.getFullYear(), now.getMonth(), 1),
       changeFrequency: 'monthly',
-      priority: 0.4,
+      priority: 0.3,
     },
   ];
 
   return [...routes, ...projectUrls];
 }
-

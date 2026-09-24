@@ -59,11 +59,11 @@ export default function ProjectTerminal({ project, techStack }) {
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
       const { startY, startH } = dragData.current;
       const dy = clientY - startY;
-      
+
       const innerHeight = contentInnerRef.current ? contentInnerRef.current.clientHeight : 800;
       const padding = 48; // 1.5rem (24px) top + bottom
       const dynamicMax = Math.min(800, innerHeight + padding);
-      
+
       setTermHeight(Math.max(120, Math.min(dynamicMax, startH + dy)));
     };
     const onUp = () => setIsDragging(false);
@@ -218,30 +218,8 @@ export default function ProjectTerminal({ project, techStack }) {
             gap: '4px',
           }}
         >
-          {[0,1,2,3].map(i => <div key={i} style={{ width: '20px', height: '1.5px', borderRadius: '1px', background: accentActive }} />)}
+          {[0, 1, 2, 3].map(i => <div key={i} style={{ width: '20px', height: '1.5px', borderRadius: '1px', background: accentActive }} />)}
         </div>
-      </div>
-
-      {/* Semantic Crawlable Markup for Search Engines */}
-      <div 
-        aria-label="Project Information"
-        style={{ 
-          position: 'absolute', 
-          width: '1px', 
-          height: '1px', 
-          padding: 0, 
-          margin: '-1px', 
-          overflow: 'hidden', 
-          clip: 'rect(0, 0, 0, 0)', 
-          whiteSpace: 'nowrap', 
-          border: 0 
-        }}
-      >
-        <h1>{project?.title} — Software Engineering Project by Rohit Chouhan</h1>
-        <p>{project?.full_description || project?.short_description}</p>
-        {techStack && techStack.length > 0 && (
-          <p>Technologies Used: {techStack.join(', ')}</p>
-        )}
       </div>
     </div>
   );

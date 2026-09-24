@@ -175,6 +175,7 @@ export default function Contact({ personal }) {
                 type="text"
                 id="name"
                 name="name"
+                autoComplete="name"
                 value={form.name}
                 onChange={handleChange}
                 placeholder="Your Name"
@@ -201,6 +202,7 @@ export default function Contact({ personal }) {
                 type="email"
                 id="email"
                 name="email"
+                autoComplete="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="you@domain.com"

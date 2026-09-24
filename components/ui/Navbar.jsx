@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Home, Briefcase, Mail, MessageSquare, X } from 'lucide-react';
+import { Home, Briefcase, FolderGit2, Mail, MessageSquare, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Feedback from '@/components/sections/Feedback';
 
@@ -11,8 +11,10 @@ export default function Navbar() {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   const navItems = [
-    { name: 'System', href: '/', icon: Home },
-    { name: 'Connect', href: '/#connect', icon: Mail },
+    { name: 'About', href: '/#about', icon: Home },
+    { name: 'Experience', href: '/#experience', icon: Briefcase },
+    { name: 'Projects', href: '/#projects', icon: FolderGit2 },
+    { name: 'Contact', href: '/#contact', icon: Mail },
     { name: 'Feedback', icon: MessageSquare, isButton: true },
   ];
 

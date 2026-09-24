@@ -3,11 +3,12 @@ import { getPersonalInfo, logVisit } from '@/lib/api';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import ChatWidget from '@/components/chatbot/ChatWidget';
 import Navbar from '@/components/ui/Navbar';
+import Footer from '@/components/ui/Footer';
 import CookieBanner from '@/components/ui/CookieBanner';
 import ConsoleSilencer from '@/components/ConsoleSilencer';
 import Script from 'next/script';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 export async function generateMetadata() {
   const personal = await getPersonalInfo();
@@ -29,6 +30,8 @@ export async function generateMetadata() {
     'Rohit Chouhan Sangli',
     'Rohit Chauhan Sangli',
     'Rohit Sangli',
+    'Rohit Chouhan Maharashtra',
+    'Rohit Chouhan Gwalior',
     'Software Engineer',
     'React Native Developer',
     'Full Stack Developer',
@@ -39,6 +42,7 @@ export async function generateMetadata() {
     'React Developer India',
     'Mobile Application Engineer',
     'Offline-First Mobile Architecture',
+    '16KB Memory Page-Size Android',
     'MERN Stack Developer'
   ];
 
@@ -73,7 +77,7 @@ export async function generateMetadata() {
         },
       ],
       locale: 'en_US',
-      type: 'website',
+      type: 'profile',
     },
     twitter: {
       card: 'summary_large_image',
@@ -115,6 +119,7 @@ export default async function RootLayout({ children }) {
   const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohit-chouhan-portfolio.vercel.app').replace(/\/+$/, '');
   const name = 'Rohit Chouhan';
   const alternateName = 'Rohit Chauhan';
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -124,7 +129,7 @@ export default async function RootLayout({ children }) {
         '@id': `${baseUrl}/#website`,
         'url': baseUrl,
         'name': 'Rohit Chouhan Portfolio',
-        'alternateName': [name, alternateName, 'Rohit Chauhan Portfolio', 'Rohit Chouhan Portfolio'],
+        'alternateName': [name, alternateName, 'Rohit Chauhan Portfolio', 'Rohit Chouhan Portfolio', 'Rohit Chouhan Developer'],
         'description': 'Official professional portfolio of Rohit Chouhan (Rohit Chauhan), Software Engineer and React Native Developer.',
         'publisher': {
           '@id': `${baseUrl}/#person`
@@ -135,11 +140,13 @@ export default async function RootLayout({ children }) {
         '@type': 'Person',
         '@id': `${baseUrl}/#person`,
         'name': name,
+        'givenName': 'Rohit',
+        'familyName': 'Chouhan',
         'alternateName': alternateName,
         'url': baseUrl,
         'image': personal?.profile_image_url || `${baseUrl}/og-image.png`,
-        'jobTitle': 'Software Engineer',
-        'description': personal?.bio || 'Software Engineer and React Native Developer specializing in mobile application engineering and full-stack development.',
+        'jobTitle': 'Software Engineer & React Native Developer',
+        'description': personal?.bio || 'Software Engineer and React Native Developer specializing in enterprise Android mobile architecture, offline-first SQLite sync, and full-stack backend engineering.',
         'worksFor': {
           '@type': 'Organization',
           'name': 'GTT Data Solutions',
@@ -161,17 +168,25 @@ export default async function RootLayout({ children }) {
           'postalCode': '416410',
           'addressCountry': 'India'
         },
+        'homeLocation': {
+          '@type': 'Place',
+          'name': 'Sangli, Maharashtra, India'
+        },
         'email': 'mailto:rohitchauhan6232@gmail.com',
         'sameAs': [
           'https://github.com/RohitChauhan13',
           'https://www.linkedin.com/in/rohitchauhan13',
+          'https://x.com/RohitChauhan13',
+          'https://twitter.com/RohitChauhan13',
           'https://www.instagram.com/rohit.chauhan.13',
           personal?.github_url,
           personal?.linkedin_url,
+          personal?.twitter_url,
         ].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i),
         'knowsAbout': [
           'React Native',
           'Android Development',
+          'Android 16KB Page-Size Migration',
           'Node.js',
           'Express.js',
           'TypeScript',
@@ -181,6 +196,8 @@ export default async function RootLayout({ children }) {
           'MySQL',
           'PostgreSQL',
           'Firebase',
+          'Firebase Cloud Messaging (FCM)',
+          'Google Maps SDK',
           'REST APIs',
           'Offline-First Mobile Architecture',
           'Full Stack Development'
@@ -208,15 +225,15 @@ export default async function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {process.env.NODE_ENV === 'production' && (
+        {process.env.NODE_ENV === 'production' && gaId && gaId !== 'G-XXXXXXX' && (
           <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX`} strategy="afterInteractive" />
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
             <Script id="google-analytics" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', 'G-XXXXXXX', {
+                gtag('config', '${gaId}', {
                   page_path: window.location.pathname,
                 });
               `}
@@ -229,6 +246,7 @@ export default async function RootLayout({ children }) {
         <ThemeToggle />
         <Navbar />
         {children}
+        <Footer />
         <ChatWidget />
         <CookieBanner />
       </body>

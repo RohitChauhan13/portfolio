@@ -9,13 +9,25 @@ export default function robots() {
         disallow: ['/api/', '/thank-you'],
       },
       {
-        userAgent: ['Googlebot', 'Bingbot', 'Applebot', 'GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'Applebot-Extended'],
+        userAgent: [
+          'Googlebot',
+          'Bingbot',
+          'Applebot',
+          'Applebot-Extended',
+          'OAI-SearchBot',
+          'GPTBot',
+          'ChatGPT-User',
+          'ClaudeBot',
+          'anthropic-ai',
+          'PerplexityBot',
+          'Google-Extended',
+          'cohere-ai',
+        ],
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/thank-you'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
   };
 }
-
