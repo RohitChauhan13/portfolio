@@ -125,7 +125,7 @@ export default async function ProjectPage({ params }) {
             '@type': 'ListItem',
             'position': 2,
             'name': 'Projects',
-            'item': `${baseUrl}/#projects`
+            'item': `${baseUrl}/`
           },
           {
             '@type': 'ListItem',
@@ -172,7 +172,7 @@ export default async function ProjectPage({ params }) {
           </li>
           <li style={{ color: 'var(--text-secondary)' }}>/</li>
           <li>
-            <Link href="/#projects" style={{ color: 'var(--text-secondary)' }}>
+            <Link href="/" style={{ color: 'var(--text-secondary)' }}>
               Projects
             </Link>
           </li>
@@ -279,7 +279,7 @@ export default async function ProjectPage({ params }) {
             </a>
           )}
           <Link
-            href="/#projects"
+            href="/"
             className="mono-text"
             style={{
               padding: '0.85rem 1.5rem',

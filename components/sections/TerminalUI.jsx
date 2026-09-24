@@ -142,7 +142,8 @@ export default function TerminalUI({ experience, education, skills, projects }) 
     });
     
     text += `];\n\n`;
-    text += `> Process exited with code 0 in ${Math.floor(Math.random() * 80 + 10)}ms.\n`;
+    const execTime = data ? (data.length * 12 + 18) : 24;
+    text += `> Process exited with code 0 in ${execTime}ms.\n`;
     text += `rohit@portfolio:~$ `;
     return text;
   };

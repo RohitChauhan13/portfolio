@@ -11,10 +11,8 @@ export default function Navbar() {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   const navItems = [
-    { name: 'About', href: '/#about', icon: Home },
-    { name: 'Experience', href: '/#experience', icon: Briefcase },
-    { name: 'Projects', href: '/#projects', icon: FolderGit2 },
-    { name: 'Contact', href: '/#contact', icon: Mail },
+    { name: 'System', href: '/', icon: Home },
+    { name: 'Connect', href: '/#connect', icon: Mail },
     { name: 'Feedback', icon: MessageSquare, isButton: true },
   ];
 
