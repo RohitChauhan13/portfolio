@@ -1,10 +1,11 @@
 import { getProjectBySlug, getProjects } from '@/lib/api';
 import { FALLBACK_PROJECTS } from '@/lib/fallbackData';
+import { PROJECT_DETAILS } from '@/lib/projectDetailsData';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ProjectTerminal from '@/components/sections/ProjectTerminal';
 import ProjectMediaTabs from '@/components/sections/ProjectMediaTabs';
-import { ArrowLeft, ExternalLink, Layers, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Layers, CheckCircle2, Cpu, ShieldCheck, Zap, HelpCircle, BarChart3 } from 'lucide-react';
 
 const GithubIcon = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -34,9 +35,11 @@ export async function generateMetadata({ params }) {
   const project = (await getProjectBySlug(slug)) || FALLBACK_PROJECTS.find(p => p.slug === slug || String(p.id) === slug);
   if (!project) return { title: 'Project Not Found | Rohit Chouhan' };
 
+  const details = PROJECT_DETAILS[project.slug || slug] || {};
   const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohit-chouhan-portfolio.vercel.app').replace(/\/+$/, '');
-  const title = `${project.title} | Software Engineering Case Study`;
-  const description = project.short_description || project.full_description?.slice(0, 160) || `Learn about ${project.title}, an engineering project by Software Engineer Rohit Chouhan (Rohit Chauhan).`;
+  
+  const title = details.metaTitle || `${project.title} Case Study & Architecture | Rohit Chouhan`;
+  const description = details.metaDescription || project.short_description || project.full_description?.slice(0, 160) || `Learn about ${project.title}, an engineering project by Software Engineer Rohit Chouhan (Rohit Chauhan).`;
   const ogImage = project.thumbnail_url || project.image_url || `${baseUrl}/og-image.png`;
   const url = `${baseUrl}/projects/${project.slug || slug}`;
   
@@ -49,13 +52,16 @@ export async function generateMetadata({ params }) {
 
   const keywords = [
     project.title,
+    `${project.title} case study`,
+    `${project.title} architecture`,
+    `${project.title} Rohit Chouhan`,
+    `${project.title} Rohit Chauhan`,
     'Software Engineering Project',
-    'Rohit Chouhan',
-    'Rohit Chauhan',
     'React Native Project',
     'Android Project',
     'Full Stack Development',
     'Software Engineer Sangli',
+    'Mobile Application Architecture',
     ...techArray,
   ].filter(Boolean);
 
@@ -67,16 +73,18 @@ export async function generateMetadata({ params }) {
       canonical: url,
     },
     openGraph: {
-      title: `${project.title} | Software Engineering Project`,
+      title,
       description,
       url,
       siteName: 'Rohit Chouhan Portfolio',
       images: [{ url: ogImage, width: 1200, height: 630, alt: `${project.title} — Case Study by Rohit Chouhan` }],
       type: 'article',
+      publishedTime: project.created_at || '2026-08-31T10:16:20.000Z',
+      authors: ['Rohit Chouhan (Rohit Chauhan)'],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${project.title} | Software Engineering Project`,
+      title,
       description,
       images: [ogImage],
       creator: '@RohitChauhan13',
@@ -92,9 +100,9 @@ export default async function ProjectPage({ params }) {
     notFound();
   }
 
+  const details = PROJECT_DETAILS[project.slug || slug] || {};
   const allProjects = FALLBACK_PROJECTS;
   const relatedProjects = allProjects.filter(p => (p.slug || String(p.id)) !== (project.slug || slug)).slice(0, 3);
-
   const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://rohit-chouhan-portfolio.vercel.app').replace(/\/+$/, '');
 
   let techStack = [];
@@ -109,6 +117,21 @@ export default async function ProjectPage({ params }) {
     images = typeof project.images === 'string' ? JSON.parse(project.images) : (project.images || []); 
   } catch(e) {}
 
+  const liveUrl = project.live_url || details.liveUrl;
+  const githubUrl = project.github_url || details.githubUrl;
+
+  const faqs = details.faqs || [
+    {
+      question: `What is ${project.title}?`,
+      answer: `${project.title} is an engineering project developed by Rohit Chouhan (Rohit Chauhan). ${project.full_description || project.short_description}`
+    },
+    {
+      question: `Who engineered ${project.title}?`,
+      answer: `This project was engineered by Rohit Chouhan, Software Engineer and React Native Developer at GTT Data Solutions in Sangli, Maharashtra, India.`
+    }
+  ];
+
+  // Comprehensive JSON-LD Structured Data Schema (@graph)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -125,7 +148,7 @@ export default async function ProjectPage({ params }) {
             '@type': 'ListItem',
             'position': 2,
             'name': 'Projects',
-            'item': `${baseUrl}/`
+            'item': `${baseUrl}/#terminal`
           },
           {
             '@type': 'ListItem',
@@ -139,18 +162,56 @@ export default async function ProjectPage({ params }) {
         '@type': 'SoftwareApplication',
         '@id': `${baseUrl}/projects/${project.slug || slug}#software`,
         'name': project.title,
-        'headline': project.title,
+        'headline': `${project.title} — Software Engineering Case Study`,
         'description': project.full_description || project.short_description,
-        'operatingSystem': 'Android, iOS, Web',
+        'operatingSystem': details.platform || 'Android, iOS, Web',
         'applicationCategory': 'DeveloperApplication',
         'url': `${baseUrl}/projects/${project.slug || slug}`,
-        ...(project.github_url ? { 'codeRepository': project.github_url } : {}),
+        ...(githubUrl ? { 'codeRepository': githubUrl } : {}),
+        ...(liveUrl ? { 'installUrl': liveUrl } : {}),
         'author': {
           '@type': 'Person',
           'name': 'Rohit Chouhan',
           'alternateName': 'Rohit Chauhan',
           'url': baseUrl
         }
+      },
+      {
+        '@type': 'TechArticle',
+        '@id': `${baseUrl}/projects/${project.slug || slug}#article`,
+        'headline': `${project.title} System Architecture & Technical Case Study`,
+        'description': details.metaDescription || project.short_description,
+        'url': `${baseUrl}/projects/${project.slug || slug}`,
+        'datePublished': project.created_at || '2026-08-31T10:16:20.000Z',
+        'dateModified': new Date().toISOString(),
+        'inLanguage': 'en-US',
+        'mainEntityOfPage': `${baseUrl}/projects/${project.slug || slug}`,
+        'author': {
+          '@type': 'Person',
+          'name': 'Rohit Chouhan',
+          'alternateName': 'Rohit Chauhan',
+          'jobTitle': 'Software Engineer & React Native Developer',
+          'url': baseUrl
+        },
+        'publisher': {
+          '@type': 'Person',
+          'name': 'Rohit Chouhan',
+          'url': baseUrl
+        },
+        'proficiencyLevel': 'Expert',
+        'dependencies': techStack.join(', ')
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${baseUrl}/projects/${project.slug || slug}#faq`,
+        'mainEntity': faqs.map(faq => ({
+          '@type': 'Question',
+          'name': faq.question,
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': faq.answer
+          }
+        }))
       }
     ]
   };
@@ -172,7 +233,7 @@ export default async function ProjectPage({ params }) {
           </li>
           <li style={{ color: 'var(--text-secondary)' }}>/</li>
           <li>
-            <Link href="/" style={{ color: 'var(--text-secondary)' }}>
+            <Link href="/#terminal" style={{ color: 'var(--text-secondary)' }}>
               Projects
             </Link>
           </li>
@@ -184,34 +245,34 @@ export default async function ProjectPage({ params }) {
       </nav>
 
       {/* Case Study Header */}
-      <header style={{ marginBottom: '3rem' }}>
+      <header style={{ marginBottom: '2.5rem' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.85rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '9999px', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }} className="mono-text">
           <Layers size={14} color="var(--accent-color)" />
           Engineering Case Study by Rohit Chouhan (Rohit Chauhan)
         </div>
 
-        <h1 style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1.25rem', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+        <h1 style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
           {project.title}
         </h1>
 
-        <p style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)', color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: '850px', marginBottom: '2rem' }}>
-          {project.short_description || project.full_description}
+        <p style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)', color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: '850px', marginBottom: '1.75rem' }}>
+          {details.subtitle || project.short_description}
         </p>
 
         {/* Metadata Chips */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', marginBottom: '1.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }} className="mono-text">
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-color)' }} />
-            Role: Lead Mobile &amp; Full Stack Engineer
+            Role: {details.role || 'Lead Mobile & Full Stack Engineer'}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }} className="mono-text">
             <CheckCircle2 size={16} color="var(--accent-color)" />
-            Verified Production Architecture
+            {details.status || 'Verified Production Architecture'}
           </div>
         </div>
 
         {/* Tech Stack Pills */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2.5rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2rem' }}>
           {techStack.map((tech) => (
             <span 
               key={tech} 
@@ -233,9 +294,9 @@ export default async function ProjectPage({ params }) {
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          {project.live_url && (
+          {liveUrl && (
             <a 
-              href={project.live_url} 
+              href={liveUrl} 
               target="_blank" 
               rel="noreferrer" 
               className="btn btn-primary" 
@@ -256,9 +317,9 @@ export default async function ProjectPage({ params }) {
               Launch Live App <ExternalLink size={18} />
             </a>
           )}
-          {project.github_url && (
+          {githubUrl && (
             <a 
-              href={project.github_url} 
+              href={githubUrl} 
               target="_blank" 
               rel="noreferrer" 
               className="btn btn-outline" 
@@ -298,25 +359,11 @@ export default async function ProjectPage({ params }) {
         </div>
       </header>
 
-      {/* Case Study Full Overview */}
-      <section style={{ marginBottom: '3.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '2.5rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
-          Architecture &amp; Technical Breakdown
-        </h2>
-        <div style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.8 }}>
-          <p style={{ marginBottom: '1.5rem' }}>
-            {project.full_description || project.short_description}
-          </p>
-          <p>
-            Engineered and delivered by <strong>Rohit Chouhan</strong>, this project exemplifies enterprise-level engineering standards, robust error boundaries, optimized state synchronization, and scalable data models tailored for modern mobile and cloud ecosystems.
-          </p>
-        </div>
-      </section>
-
-      {/* Interactive Terminal Showcase */}
+      {/* Interactive System Architecture Terminal (Front and Center CLI View) */}
       <section style={{ marginBottom: '3.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Cpu size={18} color="var(--accent-color)" />
             System Architecture CLI View
           </h2>
           <span className="mono-text" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
@@ -326,22 +373,229 @@ export default async function ProjectPage({ params }) {
         <ProjectTerminal project={project} techStack={techStack} />
       </section>
 
-      {/* Tabs for Media */}
-      <section style={{ marginBottom: '4rem' }}>
+      {/* Deep-Dive Case Study: Architecture & Engineering Breakdown */}
+      <section style={{ marginBottom: '3.5rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '2.5rem' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--accent-color)', fontWeight: 600, marginBottom: '0.75rem' }} className="mono-text">
+          <ShieldCheck size={16} />
+          Executive Architecture Overview
+        </div>
+        <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 1.85rem)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.25rem', letterSpacing: '-0.02em' }}>
+          Engineering Breakdown: How {project.title} Was Architected
+        </h2>
+        <div style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.8 }}>
+          <p style={{ marginBottom: '1.25rem' }}>
+            {details.overview || project.full_description || project.short_description}
+          </p>
+          <p>
+            Engineered and delivered by <strong>Rohit Chouhan (Rohit Chauhan)</strong>, this solution demonstrates enterprise-level mobile architecture, resilient state synchronization, and scalable data models tailored for modern mobile and cloud ecosystems.
+          </p>
+        </div>
+      </section>
+
+      {/* Key Architectural Highlights */}
+      {details.architectureHighlights && details.architectureHighlights.length > 0 && (
+        <section style={{ marginBottom: '3.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
+            Key Architectural Innovations
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            {details.architectureHighlights.map((item, idx) => (
+              <div 
+                key={idx} 
+                className="glass-panel" 
+                style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+              >
+                <div>
+                  <div className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--accent-color)', marginBottom: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    {item.badge}
+                  </div>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
+                    {item.title}
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Challenges & Engineering Solutions */}
+      {details.challenges && details.challenges.length > 0 && (
+        <section style={{ marginBottom: '3.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
+            Technical Challenges &amp; Solutions
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            {details.challenges.map((c, idx) => (
+              <div 
+                key={idx} 
+                style={{ 
+                  background: 'var(--card-bg)', 
+                  border: '1px solid var(--border-color)', 
+                  borderRadius: '16px', 
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem'
+                }}
+              >
+                <div>
+                  <span className="mono-text" style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '0.35rem' }}>
+                    Challenge #{idx + 1}
+                  </span>
+                  <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem', lineHeight: 1.5 }}>
+                    {c.challenge}
+                  </p>
+                </div>
+                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
+                  <span className="mono-text" style={{ fontSize: '0.75rem', color: 'var(--accent-color)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '0.35rem' }}>
+                    Engineered Solution
+                  </span>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
+                    {c.solution}
+                  </p>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 500, background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '0.35rem 0.75rem', borderRadius: '6px' }}>
+                    <Zap size={14} color="var(--accent-color)" />
+                    Impact: {c.impact}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Production Impact & Key Metrics */}
+      {details.metrics && details.metrics.length > 0 && (
+        <section style={{ marginBottom: '3.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            <BarChart3 size={20} color="var(--accent-color)" />
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em', margin: 0 }}>
+              Production Impact &amp; Metrics
+            </h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
+            {details.metrics.map((m, idx) => (
+              <div 
+                key={idx} 
+                className="glass-panel" 
+                style={{ padding: '1.75rem', textAlign: 'center' }}
+              >
+                <div className="gradient-text mono-text" style={{ fontSize: 'clamp(2rem, 4vw, 2.5rem)', fontWeight: 800, marginBottom: '0.35rem' }}>
+                  {m.value}
+                </div>
+                <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem', marginBottom: '0.25rem' }}>
+                  {m.label}
+                </div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                  {m.description}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Visual Demonstrations & Media Section */}
+      <section style={{ marginBottom: '3.5rem' }}>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem' }}>
           Visual Demonstrations &amp; Media
         </h2>
         <ProjectMediaTabs project={project} images={images} />
       </section>
 
+      {/* Technical FAQ Section (Critical for AI Search Citations & Google FAQ Rich Snippets) */}
+      <section style={{ marginBottom: '4rem', background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '2.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+          <HelpCircle size={20} color="var(--accent-color)" />
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.02em' }}>
+            Frequently Asked Questions: {project.title}
+          </h2>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {faqs.map((faq, idx) => (
+            <article 
+              key={idx} 
+              style={{ borderBottom: idx < faqs.length - 1 ? '1px solid var(--border-color)' : 'none', paddingBottom: idx < faqs.length - 1 ? '1.5rem' : 0 }}
+            >
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                {faq.question}
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                {faq.answer}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Author & Verification Card */}
+      <div 
+        className="glass-panel" 
+        style={{ padding: '2rem', marginBottom: '3.5rem', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}
+      >
+        <div>
+          <div className="mono-text" style={{ fontSize: '0.8rem', color: 'var(--accent-color)', marginBottom: '0.25rem' }}>
+            ENGINEERING CREDENTIALS
+          </div>
+          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+            Case Study Authored by Rohit Chouhan
+          </div>
+          <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.25rem' }}>
+            Software Engineer &amp; React Native Developer at GTT Data Solutions (Sangli, Maharashtra, India)
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Link 
+            href="/#connect" 
+            className="btn btn-primary"
+            style={{ 
+              padding: '0.75rem 1.5rem', 
+              borderRadius: '8px', 
+              background: 'var(--accent-color)', 
+              color: '#fff', 
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              textDecoration: 'none'
+            }}
+          >
+            Contact Rohit
+          </Link>
+          <a 
+            href="https://github.com/RohitChauhan13" 
+            target="_blank" 
+            rel="noreferrer"
+            className="btn btn-outline"
+            style={{ 
+              padding: '0.75rem 1.5rem', 
+              borderRadius: '8px', 
+              background: 'var(--card-bg)', 
+              border: '1px solid var(--border-color)', 
+              color: 'var(--text-primary)', 
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            <GithubIcon size={16} /> GitHub Profile
+          </a>
+        </div>
+      </div>
+
       {/* Related Projects Section for Deep Internal Linking */}
-      <section style={{ borderTop: '1px solid var(--border-color)', paddingTop: '3.5rem', marginTop: '3.5rem' }}>
+      <section style={{ borderTop: '1px solid var(--border-color)', paddingTop: '3.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-            Explore More Projects by Rohit Chouhan
+            Explore More Engineering Case Studies
           </h2>
-          <Link href="/#projects" className="mono-text" style={{ color: 'var(--accent-color)', fontSize: '0.9rem' }}>
-            View All &rarr;
+          <Link href="/#terminal" className="mono-text" style={{ color: 'var(--accent-color)', fontSize: '0.9rem' }}>
+            View All in Terminal &rarr;
           </Link>
         </div>
 

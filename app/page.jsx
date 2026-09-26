@@ -4,6 +4,7 @@ import Contact from '@/components/sections/Contact';
 import TerminalUI from '@/components/sections/TerminalUI';
 import SceneWrapper from '@/components/three/SceneWrapper';
 import { Suspense } from 'react';
+import Link from 'next/link';
 
 export const revalidate = 300;
 
@@ -68,6 +69,20 @@ export default async function Home() {
 
         {/* MASTER TERMINAL UI */}
         <TerminalUI experience={experience} education={education} skills={skills} projects={projects} />
+
+        {/* SEMANTIC CRAWLER DIRECTORY (Enables Googlebot, Bingbot & AI to index all project URLs from the root domain) */}
+        <section aria-label="Software Engineering Projects Directory" className="sr-only">
+          <h2>Featured Engineering Case Studies &amp; Software Projects by Rohit Chouhan</h2>
+          <ul>
+            {projects.map((p) => (
+              <li key={p.slug || p.id}>
+                <Link href={`/projects/${p.slug || p.id}`}>
+                  {p.title} — Software Engineering Case Study by Rohit Chouhan (Rohit Chauhan). {p.short_description || p.full_description}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         {/* DEDICATED CONTACT SECTION */}
         <section id="connect" style={{ width: '100%', maxWidth: '1400px', padding: '2rem 2rem 4rem 2rem' }}>

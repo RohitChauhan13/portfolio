@@ -27,7 +27,7 @@ export default async function sitemap() {
         url: `${baseUrl}/projects/${project.slug || project.id}`,
         lastModified: lastMod,
         changeFrequency: 'weekly',
-        priority: 0.8,
+        priority: 0.9,
       };
     });
 

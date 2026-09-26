@@ -27,16 +27,16 @@ Rohit Chouhan is an Indian Software Engineer and React Native Developer at GTT D
 ### What is Rohit Chouhan's work experience?
 Rohit Chouhan serves as a Software Engineer at GTT Data Solutions (May 2025 – Present). He builds enterprise React Native applications for commercial clients, architected offline-first SQLite data synchronization, optimized mobile app load times by 40%, spearheaded the audit and migration of 6+ APKs to Google's mandatory 16KB memory page-size standard, and deployed production applications to the Google Play Console.
 
-### What are Rohit Chouhan's verified projects?
-1. **Shikuyaa:** Live production mobile educational application with 10,000+ active users and 50,000+ downloads. Rohit engineered the Bridge 4 Bharat (B4B) module end-to-end, including session scheduling and MeritHub WebView virtual classrooms.
-2. **Firecrackers Business Suite:** Commercial enterprise product suite (employee app, admin app, backend API) with custom Node.js/Express/MySQL deployed on a Microsoft Azure Windows VM with Caddy reverse proxy and DuckDNS.
-3. **MediMate:** Medicine inventory and credit ("Udhaar") tracking mobile app and REST backend (Node.js, PostgreSQL, Brevo email OTP, Firebase Admin SDK). GitHub: https://github.com/RohitChauhan13/MediMate.git
-4. **PayPlus:** Payroll management and automated salary calculation application supporting hybrid cash/online payments and TDS calculations. GitHub: https://github.com/RohitChauhan13/PayPlusApp.git
-5. **RSF — Enterprise Employee Management:** Attendance management with in-app face verification, 24/7 background location tracking, and offline-first SQLite sync.
-6. **MahaGPS:** Vehicle fleet tracking application deployed to Google Play Console.
-7. **Ticket Khidakee:** Event ticket booking mobile app featuring an interactive, high-performance seat layout engineered in native React Native code (replacing legacy WebView rendering).
-8. **Draft Career:** AI-assisted resume builder platform.
-9. **RAG Bot:** Personal Retrieval-Augmented Generation chatbot assistant.
+### What are Rohit Chouhan's verified projects and case studies?
+1. **Shikuyaa:** Live production mobile educational application with 10,000+ active users and 50,000+ downloads. Rohit engineered the Bridge 4 Bharat (B4B) module end-to-end, including session scheduling and MeritHub WebView virtual classrooms. Case study: https://rohit-chouhan-portfolio.vercel.app/projects/shikuyaa
+2. **Firecrackers Business Suite:** Commercial enterprise product suite (employee app, admin app, backend API) with custom Node.js/Express/MySQL deployed on a Microsoft Azure Windows VM with Caddy reverse proxy and DuckDNS. Case study: https://rohit-chouhan-portfolio.vercel.app/projects/firecrackers-business-suite
+3. **MediMate:** Medicine inventory and credit ("Udhaar") tracking mobile app and REST backend (Node.js, PostgreSQL, Brevo email OTP, Firebase Admin SDK). Case study: https://rohit-chouhan-portfolio.vercel.app/projects/medimate — GitHub: https://github.com/RohitChauhan13/MediMate.git
+4. **PayPlus:** Payroll management and automated salary calculation application supporting hybrid cash/online payments and TDS calculations. Case study: https://rohit-chouhan-portfolio.vercel.app/projects/payplus — GitHub: https://github.com/RohitChauhan13/PayPlusApp.git
+5. **RSF — Enterprise Employee Management:** Attendance management with in-app face verification, 24/7 background location tracking, and offline-first SQLite sync. Case study: https://rohit-chouhan-portfolio.vercel.app/projects/rsf-enterprise-employee-management
+6. **Ticket Khidakee:** Event ticket booking mobile app featuring an interactive, high-performance seat layout engineered in native React Native code (replacing legacy WebView rendering). Case study: https://rohit-chouhan-portfolio.vercel.app/projects/ticket-khidakee — Website: https://www.ticketkhidakee.com/
+7. **MahaGPS:** Vehicle fleet tracking application deployed to Google Play Console. Case study: https://rohit-chouhan-portfolio.vercel.app/projects/mahagps
+8. **Draft Career:** AI-assisted resume builder platform. Case study: https://rohit-chouhan-portfolio.vercel.app/projects/draft-career — Live App: https://draft-career.vercel.app/
+9. **RAG Bot:** Personal Retrieval-Augmented Generation chatbot assistant. Case study: https://rohit-chouhan-portfolio.vercel.app/projects/rag-bot
 
 ---
 
